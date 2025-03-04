@@ -34,6 +34,7 @@ const projectSchema = new mongoose.Schema(
       trim: true,
     },
     description: String,
+    // reference to userID (lecturer)
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -52,6 +53,7 @@ const projectSchema = new mongoose.Schema(
     groupId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Group",
+      required: true,
     },
     // Project type - research, journal, conference
     projectType: {
@@ -64,6 +66,8 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    // Approval date
+    approvedAt: Date,
     objective: String,
     methodology: String,
     type: {
@@ -91,7 +95,7 @@ projectSchema.statics.ProjectType = ProjectType;
 projectSchema.statics.ProjectCategoryType = ProjectCategoryType;
 
 // Add indexes for frequently queried fields
-projectSchema.index({ userId: 1 });
+projectSchema.index({ createdBy: 1 });
 projectSchema.index({ status: 1 });
 projectSchema.index({ groupId: 1 });
 projectSchema.index({ projectType: 1 });
