@@ -1,5 +1,19 @@
 const mongoose = require("mongoose");
 
+// Define proper enums
+const MemberRole = {
+  LEADER: "Leader",
+  MEMBER: "Member",
+  CHAIRMAN: "Chairman",
+  SECRETARY: "Secretary",
+};
+
+const MemberStatus = {
+  ACTIVE: "Active",
+  INACTIVE: "Inactive",
+  PENDING: "Pending",
+};
+
 const groupMemberSchema = new mongoose.Schema(
   {
     groupId: {
@@ -7,30 +21,20 @@ const groupMemberSchema = new mongoose.Schema(
       ref: "Group",
       required: true,
     },
-    memberName: {
-      type: String,
-      required: true,
-    },
-    memberEmail: {
-      type: String,
-      validate: {
-        validator: function (v) {
-          return /^\S+@\S+\.\S+$/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid email!`,
-      },
-    },
-    role: {
-      type: String,
-      trim: true,
-    },
+    // referncing userID to get user information
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: Object.values(MemberRole),
+      default: MemberRole.MEMBER,
     },
     status: {
       type: String,
-      enum: [Leader, Member, Chairman, Secretary],
+      enum: Object.values(MemberStatus),
       default: MemberStatus.PENDING,
     },
     joinDate: {
@@ -44,12 +48,15 @@ const groupMemberSchema = new mongoose.Schema(
 );
 
 // Add statics for enum access
+groupMemberSchema.statics.MemberRole = MemberRole;
 groupMemberSchema.statics.MemberStatus = MemberStatus;
 
-// Add indexes for frequently queried fields
+// Add indexes
 groupMemberSchema.index({ groupId: 1 });
 groupMemberSchema.index({ userId: 1 });
 groupMemberSchema.index({ status: 1 });
-groupMemberSchema.index({ memberEmail: 1 });
+
+// Ensure a user can only be in one group
+groupMemberSchema.index({ userId: 1 }, { unique: true });
 
 module.exports = mongoose.model("GroupMember", groupMemberSchema);
