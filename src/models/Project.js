@@ -75,6 +75,7 @@ const projectSchema = new mongoose.Schema(
       enum: Object.values(ProjectCategoryType),
       default: ProjectCategoryType.INTERNAL,
     },
+    // total budget lecturer asked for in project registration
     approvedBudget: {
       type: Number,
       default: 0,
