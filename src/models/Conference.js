@@ -52,23 +52,24 @@ const conferenceSchema = new mongoose.Schema(
       default: PresentationType.ORAL,
     },
     conferenceProceedings: String,
-    // Additional fields that might be useful
-    submissionDate: Date,
-    registrationFee: Number,
-    isInternational: {
-      type: Boolean,
-      default: false,
-    },
-    attendees: [
-      {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
-        name: String,
-        role: String,
-      },
-    ],
+
+    // Additional fields that might be useful -
+    //  submissionDate: Date,
+    // registrationFee: Number,
+    // isInternational: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // attendees: [
+    //   {
+    //     userId: {
+    //       type: mongoose.Schema.Types.ObjectId,
+    //       ref: "User",
+    //     },
+    //     name: String,
+    //     role: String,
+    //   },
+    // ],
   },
   {
     timestamps: true,
